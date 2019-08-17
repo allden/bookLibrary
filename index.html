@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+    <title>Library</title>
+    <style>
+    h1 {
+        text-align: center;
+    }
+
+    .delete {
+        font-weight: bold;
+        color: #ff6240;
+        cursor:pointer;
+    }
+
+    .delete:hover {
+        color: #f3502b;
+    }
+
+    .success {
+        background-color: #1EAEDB;
+    }
+
+    .fail {
+        background-color: #ff6240;
+    }
+
+    .alert {
+        padding: 1rem;
+        border-radius: 5px;
+        color: #fff;
+        text-align: center;
+        margin: .5rem auto;
+    }
+
+    .toggle {
+        color: #1EAEDB;
+    }
+
+    .toggle:hover {
+        cursor: pointer;
+        color: rgb(22, 146, 184);
+    }
+
+    @media(max-width: 550px) {
+        input, select {
+            width: 100%;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="one-third column">&nbsp;</div>
+            <div class="one-third column"><h1>Library</h1></div>
+            <div class="one-third column">&nbsp;</div>
+        </div>
+        <div class="row">
+            <input type="button" value="New Book" class="button-primary u-full-width btn">
+        </div>
+        <div class="row interface">
+            <div class="three columns">
+                <label for="title">Title</label>
+                <input type="text" name="title" placeholder="Enter a book title" id="title">
+            </div>
+            <div class="three columns">
+                <label for="author">Author</label>
+                <input type="text" name="author" placeholder="Enter a book author" id="author">
+            </div>
+            <div class="three columns">
+                <label for="pages">Pages</label>
+                <input type="number" name="pages" placeholder="# of Pages" id="pages">
+            </div>
+            <div class="three columns">
+                <label>Read Status</label>
+                <select name="read" id="read">
+                    <option value="true">Read</option>
+                    <option value="false">Not Read</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <table class="u-full-width">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="content">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
