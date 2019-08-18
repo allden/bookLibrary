@@ -6,8 +6,21 @@ let readStatus = document.getElementById('read');
 let content = document.getElementById('content');
 let button = document.querySelector('.btn');
 let myLibrary = [];
+getLib();
+render(myLibrary);
+setEvents();
 // events
-button.addEventListener('click', addToLibrary);
+function setEvents() {
+    button.addEventListener('click', addToLibrary);
+    let removeBtn = document.querySelectorAll('.delete');
+    for(i = 0; i < removeBtn.length; i++) {
+        removeBtn[i].addEventListener('click', remove);
+    }
+    let toggleBtn = document.querySelectorAll('.toggle');
+    for(i = 0; i < toggleBtn.length; i++) {
+        toggleBtn[i].addEventListener('click', changeStatus);
+    }
+}
 // functions
 function Book(title, author, pages, read) {
     this.title = title;
@@ -22,17 +35,10 @@ function addToLibrary() {
         let book = new Book(title.value, author.value, numOfPages.value, readStatus.value)
         myLibrary.push(book);
         render(book);
-        // because if i were to assign this at the start it wouldn't apply to any buttons because they don't exist yet,
-        // on calling addToLibrary i get all the existing buttons and assign the click event
-        let removeBtn = document.querySelectorAll('.delete');
-        for(i = 0; i < removeBtn.length; i++) {
-            removeBtn[i].addEventListener('click', remove);
-        }
-        let toggleBtn = document.querySelectorAll('.toggle');
-        for(i = 0; i < toggleBtn.length; i++) {
-            toggleBtn[i].addEventListener('click', changeStatus);
-        }
+        clear();
+        setEvents();
         showAlert('Book added successfully.', 'success');
+        setLib();
     } else {
         showAlert('Please enter a value.', 'fail');
     }
@@ -46,9 +52,8 @@ function remove(e) {
             e.target.parentElement.remove();
             myLibrary.splice(i, 1);
             showAlert('Book removed successfully.', 'success');
-        } else {
-            showAlert('Something seems to have gone wrong..', 'fail');
-        };
+            setLib();
+        }
     }
 }
 
@@ -59,30 +64,36 @@ function changeStatus(e) {
         if(myLibrary[i].title === e.target.parentElement.childNodes[1].textContent && myLibrary[i].read === 'false') {
             myLibrary[i].read = 'true';
             e.target.parentElement.childNodes[7].textContent = 'Read';
-        } else {
+            console.log(e.target.parentElement.childNodes[7].textContent);
+        } else if(myLibrary[i].title === e.target.parentElement.childNodes[1].textContent && myLibrary[i].read === 'true'){
             myLibrary[i].read = 'false';
             e.target.parentElement.childNodes[7].textContent = 'Not Read';
+            console.log(e.target.parentElement.childNodes[7].textContent);
         };
     }
+    setLib();
 }
 
 // iterate over the myLibrary array and for each object, add the title, author, pages and read variables to the tbody's innerHTML
 function render(book) {
-    let val = '';
-    if(book.read === 'true') {
-        val = 'Read';
-    } else {
-        val = 'Not Read';
-    }
-    content.innerHTML += `
-    <tr>
-        <td>${book.title}</td>
-        <td>${book.author}</td>
-        <td>${book.pages}</td>
+    content.innerHTML = '';
+    let val;
+    for(i = 0; i < myLibrary.length; i++) {
+        if(myLibrary[i].read === 'true') {
+            val = 'Read';
+        } else {
+            val = 'Not Read';
+        }
+        content.innerHTML += `
+        <tr>
+        <td>${myLibrary[i].title}</td>
+        <td>${myLibrary[i].author}</td>
+        <td>${myLibrary[i].pages}</td>
         <td class="toggle">${val}</td>
         <td class="delete">X</td>
-    </tr>
-    `;
+        </tr>
+        `;  
+    }
 }
 
 // create a div element, append a text node with the msg parameter, add the class for coloration and the base alert class
@@ -100,3 +111,29 @@ function showAlert(msg, className) {
 function hideAlert() {
     document.querySelector('.alert').remove();
 }
+
+function clear() {
+    title.value = '';
+    author.value = '';
+    numOfPages.value = '';
+}
+
+function setLib() {
+    localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+}
+
+function getLib() {
+    if(localStorage.getItem('myLibrary')) {
+        storedLibrary = localStorage.getItem('myLibrary');
+        myLibrary = JSON.parse(storedLibrary);
+    } else {
+        localStorage.setItem('myLibrary', '');
+    }
+}
+
+function localLibraryClear() {
+    localStorage.clear();
+}
+
+// because if i were to assign this at the start it wouldn't apply to any buttons because they don't exist yet,
+// on calling addToLibrary i get all the existing buttons and assign the click event
